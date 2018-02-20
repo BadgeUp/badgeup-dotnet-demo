@@ -8,7 +8,7 @@ using BadgeUpClient.Responses;
 using BadgeUpClient.Types;
 
 
-namespace badgeup_poc
+namespace BadgeupDotnetDemo
 {
 	class Program
 	{
