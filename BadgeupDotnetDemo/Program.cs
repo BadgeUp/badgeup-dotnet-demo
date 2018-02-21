@@ -25,19 +25,19 @@ namespace BadgeupDotnetDemo
 			_badgeUpClient = new BadgeUpClient(System.Environment.GetEnvironmentVariable("INTEGRATION_API_KEY"));
 			Random r = new Random();
 			_subjectId = "sub-" + r.Next(0, 99999);
-			LogMessage($"Subject {_subjectId} created");
+			LogMessage($"Subject {_subjectId} created\n");
 
 			LogMessage("Sending event - 200 steps walked, ");
 			var eventResponse = await _badgeUpClient.Event.SendV2Preview(new Event(_subjectId, "step", new Modifier() { Inc = 200 }));
 			var progressResults = await _badgeUpClient.Progress.GetProgress(_subjectId);
 			await LogProgress(progressResults);
 			await LogEvent(eventResponse);
-			LogMessage("\n\n");
+			LogMessage("\n");
 
 			LogMessage("Sending event - 200 steps walked");
 			eventResponse = await _badgeUpClient.Event.SendV2Preview(new Event(_subjectId, "step", new Modifier() { Inc = 200 }), true);
 			await LogEvent(eventResponse);
-			LogMessage("\n\n");
+			LogMessage("\n");
 
 			LogMessage("Sending event - 20 000 steps walked");
 			eventResponse = await _badgeUpClient.Event.SendV2Preview(new Event(_subjectId, "step", new Modifier() { Inc = 20000 }), true);
@@ -67,13 +67,13 @@ namespace BadgeupDotnetDemo
 			if (e.Results.Count == 1)
 				LogMessage("No achievements earned");
 
-			for (int i = 1; i < e.Results.Count; i++)
+			else
 			{
-				string achievementId = e.Results[i].Event.Key
-					.Substring(e.Results[i].Event.Key.IndexOf("earned:") + "earned:".Length,
-						e.Results[i].Event.Key.Length - (e.Results[i].Event.Key.IndexOf("earned:") + "earned:".Length));
-				var achievement = await _badgeUpClient.Achievement.GetById(achievementId);
-				LogMessage($"Achievement \"{achievement.Name}\" earned.");
+				foreach (var progress in e.Results[0].Progress.Where(x => x.IsComplete))
+				{
+					var achievement = await _badgeUpClient.Achievement.GetById(progress.AchievementId);
+					LogMessage($"Achievement \"{achievement.Name}\" earned.");
+				}
 			}
 		}
 
