@@ -27,19 +27,22 @@ namespace BadgeupDotnetDemo
 			_subjectId = "sub-" + r.Next(0, 99999);
 			LogMessage($"Subject {_subjectId} created\n");
 
-			LogMessage("Sending event - 200 steps walked, ");
+			// send an event then get the progress as a separate call
+			LogMessage("Sending event - 200 steps walked");
 			var eventResponse = await _badgeUpClient.Event.SendV2Preview(new Event(_subjectId, "step", new Modifier() { Inc = 200 }));
 			var progressResults = await _badgeUpClient.Progress.GetProgress(_subjectId, includeCriteria: true);
 			await LogProgress(progressResults);
 			await LogEvent(eventResponse);
 			LogMessage("\n");
 
+			// send the event, showing incomplete achievements
 			LogMessage("Sending event - 200 steps walked");
 			eventResponse = await _badgeUpClient.Event.SendV2Preview(new Event(_subjectId, "step", new Modifier() { Inc = 200 }), true);
 			await LogEvent(eventResponse);
 			LogMessage("\n");
 
-			LogMessage("Sending event - 20 000 steps walked");
+			// send the event, showing incomplete achievements
+			LogMessage("Sending event - 20000 steps walked");
 			eventResponse = await _badgeUpClient.Event.SendV2Preview(new Event(_subjectId, "step", new Modifier() { Inc = 20000 }), true);
 			await LogEvent(eventResponse);
 		}
@@ -65,7 +68,7 @@ namespace BadgeupDotnetDemo
 		{
 			LogMessage("Progress:");
 			await LogProgress(e.Results[0].Progress.ToList());
-			
+
 			var steps = await _badgeUpClient.Metric.GetIndividualBySubject(_subjectId, "step");
 			LogMessage($"Overall steps: {steps.Value}");
 			if (e.Results.Count == 1)

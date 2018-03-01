@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("badgeup-poc")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("badgeup-dotnet-demo")]
+[assembly: AssemblyDescription("BadgeUp .NET demo application")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("badgeup-poc")]
+[assembly: AssemblyCompany("BadgeUp")]
+[assembly: AssemblyProduct("badgeup-dotnet-demo")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
