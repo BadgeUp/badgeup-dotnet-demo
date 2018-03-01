@@ -51,7 +51,7 @@ namespace BadgeupDotnetDemo
 				foreach (var criterion in progressResult.ProgressTree.Criteria.Where(x => x.Value > 0))
 				{
 					CriterionResponse criterionResult;
-					if(progressResult.Achievement.Resources.Criteria.Any(x => x.Id == criterion.Key))
+					if(progressResult.Achievement != null && progressResult.Achievement.Resources.Criteria.Any(x => x.Id == criterion.Key))
 						criterionResult = progressResult.Achievement.Resources.Criteria.First(x => x.Id == criterion.Key);
 					else
 						criterionResult = await _badgeUpClient.Criterion.GetById(criterion.Key);
