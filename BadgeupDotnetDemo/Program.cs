@@ -50,7 +50,11 @@ namespace BadgeupDotnetDemo
 			{
 				foreach (var criterion in progressResult.ProgressTree.Criteria.Where(x => x.Value > 0))
 				{
-					var criterionResult = progressResult.Achievement.Resources.Criteria.First(x => x.Id == criterion.Key);
+					CriterionResponse criterionResult;
+					if(progressResult.Achievement.Resources.Criteria.Any(x => x.Id == criterion.Key))
+						criterionResult = progressResult.Achievement.Resources.Criteria.First(x => x.Id == criterion.Key);
+					else
+						criterionResult = await _badgeUpClient.Criterion.GetById(criterion.Key);
 					LogMessage(
 						$"Criterion  \"{criterionResult.Name}\" is {criterion.Value * 100:.##}% complete = {criterionResult.Evaluation.Threshold * criterion.Value} steps taken.");
 				}
