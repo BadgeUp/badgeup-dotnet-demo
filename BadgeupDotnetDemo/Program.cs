@@ -29,7 +29,7 @@ namespace BadgeupDotnetDemo
 
 			LogMessage("Sending event - 200 steps walked, ");
 			var eventResponse = await _badgeUpClient.Event.SendV2Preview(new Event(_subjectId, "step", new Modifier() { Inc = 200 }));
-			var progressResults = await _badgeUpClient.Progress.GetProgress(_subjectId);
+			var progressResults = await _badgeUpClient.Progress.GetProgress(_subjectId, includeCriteria: true);
 			await LogProgress(progressResults);
 			await LogEvent(eventResponse);
 			LogMessage("\n");
@@ -50,7 +50,7 @@ namespace BadgeupDotnetDemo
 			{
 				foreach (var criterion in progressResult.ProgressTree.Criteria.Where(x => x.Value > 0))
 				{
-					var criterionResult = await _badgeUpClient.Criterion.GetById(criterion.Key);
+					var criterionResult = progressResult.Achievement.Resources.Criteria.First(x => x.Id == criterion.Key);
 					LogMessage(
 						$"Criterion  \"{criterionResult.Name}\" is {criterion.Value * 100:.##}% complete = {criterionResult.Evaluation.Threshold * criterion.Value} steps taken.");
 				}
